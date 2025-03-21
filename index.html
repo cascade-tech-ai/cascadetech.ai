@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cascade Technologies</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: 'JetBrains Mono';
+            src: url('https://cdnjs.cloudflare.com/ajax/libs/JetBrainsMono/2.242/web/woff2/JetBrainsMono-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            background-color: #000;
+            color: rgba(255, 255, 255, 0.8);
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+            overflow-x: hidden;
+            letter-spacing: 0.02em;
+            font-size: 15px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 5vw;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.15 0"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
+            opacity: 0.05;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5vh 0 3vh;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 1rem;
+            letter-spacing: 0.2em;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: rgba(80, 180, 255, 0.8);
+        }
+
+        .hero-image {
+            width: 100%;
+            margin: 2vh 0 8vh;
+            opacity: 0.9;
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 15vh;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-size: 0.9rem;
+            font-weight: normal;
+            letter-spacing: 0.1em;
+            margin-bottom: 4vh;
+            color: rgba(255, 255, 255, 0.6);
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 30px;
+            height: 1px;
+            background: rgba(80, 180, 255, 0.3);
+        }
+
+        p {
+            margin-bottom: 2vh;
+            max-width: 700px;
+        }
+
+        ul {
+            margin: 3vh 0;
+            list-style-type: none;
+        }
+
+        li {
+            margin-bottom: 2vh;
+            padding-left: 1.5em;
+            position: relative;
+        }
+
+        li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: rgba(80, 180, 255, 0.5);
+        }
+
+        .email {
+            color: rgba(80, 180, 255, 0.8);
+            text-decoration: none;
+        }
+
+        .email:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin: 15vh 0 5vh;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">CASCADE</div>
+            <nav>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#consulting">Consulting</a></li>
+                    <li><a href="#inference">AI Inference</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <div class="hero-image">
+            <img src="/api/placeholder/900/600" alt="Cascade visualization" id="hero-img">
+        </div>
+        
+        <div class="section" id="about">
+            <h1>ABOUT US</h1>
+            <p>The year is 2025 and the world is faced with a confounding duality:</p>
+            <ul>
+                <li>Generative AI is a broken, frustrating and hollow simulacrum of what it often appears to be upon first examination.</li>
+                <li>Nearly every company on earth should be trying to figure out how they can integrate gen AI into their business.</li>
+            </ul>
+            <p>Cascade Technologies was founded to address both of these needs.</p>
+            <p>To address the second issue, we provide expert advice and assistance as to how generative AI can be used today to improve your business. And maybe more importantly, how it can't.</p>
+            <p>To address the first issue, we are building tools to harness this technology and allow you to focus its strengths, and sand down the burrs of its weaknesses.</p>
+        </div>
+        
+        <div class="section" id="consulting">
+            <h1>CONSULTING SERVICES</h1>
+            <p>We don't have a lot of time to take on new work at the moment, but if you either have a) a lot of money or b) an interesting challenge in the implementation of generative AI or, preferably, c) both, then please get in touch: <a href="mailto:hello@cascadetech.ai" class="email">hello@cascadetech.ai</a></p>
+        </div>
+        
+        <div class="section" id="inference">
+            <h1>NEXT GEN AI INFERENCE</h1>
+            <p>Cascade Technologies are building a revolutionary new LLM inference platform. The era of the dominant LLM inference modality introduced by OpenAI has proven more long lasting than expected, but it is anachronistic, limiting, and in the end constricts the promise of these marvelous machines.</p>
+            <p>At their core, LLMs are a dynamic, elegant, and even poetic guide through the probability space of human thought. Contemporary LLM inference modalities are such a tragic constriction of this potential! LLM inference APIs up to this point have taken the form of a message in a bottle; drifting back and forth across a lonely sea between human and machine intelligence.</p>
+            <p>'Flow prompting' is an attempt to bridge that ocean, to make human-LLM correspondence less of a transaction and more of a dance, or at least more of a real conversation. A good conversation doesn't have the rigid structure of a protocol, it is a constant flow of information and ideas between two parties, each reacting to the ideas of the other.</p>
+            <p>You'll have to forgive the obtuse metaphors. Code will follow soon, but for the moment, maybe reflect on what you think those ideas might look like if they were made manifest.</p>
+        </div>
+        
+        <div class="section" id="contact">
+            <h1>CONTACT</h1>
+            <p>If you would like to get in touch about investment opportunities, our consulting services, or just to discuss the deep mysteries of the universe, please don't hesitate to reach out: <a href="mailto:hello@cascadetech.ai" class="email">hello@cascadetech.ai</a></p>
+        </div>
+        
+        <footer>
+            Cascade Technologies © 2025
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Reveal sections on scroll
+            const sections = document.querySelectorAll('.section');
+            
+            function checkVisibility() {
+                const windowHeight = window.innerHeight;
+                
+                sections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top < windowHeight * 0.8) {
+                        section.classList.add('visible');
+                    }
+                });
+            }
+            
+            // Initial check
+            setTimeout(function() {
+                sections[0].classList.add('visible');
+                checkVisibility();
+            }, 300);
+            
+            // Check on scroll
+            window.addEventListener('scroll', checkVisibility);
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
