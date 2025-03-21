@@ -81,20 +81,15 @@
         }
 
         .hero-image {
-            position: fixed;
-            top: 5vh;
-            right: 0;
-            z-index: -1;
-            pointer-events: none;
-            display: flex;
-            justify-content: flex-end;
+            text-align: right;
+            margin-bottom: 2vh;
+            margin-right: 5vh;
         }
 
         .hero-image img {
-            transform: scale(0.25);
+            width: 33%;
+            height: auto;
             opacity: 0.7;
-            transform-origin: top right;
-            margin-right: 3vw;
         }
 
         .section {
@@ -177,22 +172,22 @@
 <body>
     <div class="noise"></div>
     
-    <div class="hero-image">
-        <img src="cascade.webp" alt="Cascade visualization" id="hero-img">
-    </div>
-    
     <div class="container">
         <header>
             <div class="logo">CASCADE</div>
             <nav>
                 <ul>
                     <li><a href="#about">About</a></li>
-                    <li><a href="#consulting">Consulting</a></li>
                     <li><a href="#inference">AI Inference</a></li>
+                    <li><a href="#consulting">Consulting</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
         </header>
+        
+        <div class="hero-image">
+            <img src="cascade.webp" alt="Cascade visualization" id="hero-img">
+        </div>
         
         <div class="section" id="about">
             <h1>ABOUT US</h1>
@@ -206,17 +201,17 @@
             <p>To address the first issue, we are building tools to harness this technology and allow you to focus its strengths, and sand down some of the burrs of its weaknesses.</p>
         </div>
         
-        <div class="section" id="consulting">
-            <h1>CONSULTING SERVICES</h1>
-            <p>We don't have a lot of time to take on new work at the moment, but if you either have a) a lot of money or b) an interesting challenge in the implementation of generative AI or, preferably, c) both, then please get in touch: <a href="mailto:hello@cascadetech.ai" class="email">hello@cascadetech.ai</a></p>
-        </div>
-        
         <div class="section" id="inference">
             <h1>NEXT GEN AI INFERENCE</h1>
             <p>Cascade Technologies are building a revolutionary new LLM inference platform. The era of the dominant LLM inference modality introduced by OpenAI has proven more long lasting than expected, but it is anachronistic, limiting, and in the end constricts the promise of these marvelous machines.</p>
             <p>At their core, LLMs are a dynamic, elegant, and even poetic guide through the probability space of human thought. Contemporary LLM inference modalities are such a tragic constriction of this potential! LLM inference APIs up to this point have taken the form of a message in a bottle; drifting back and forth across a lonely sea between human and machine intelligence.</p>
             <p>'Flow prompting' is an attempt to bridge that ocean, to make human-LLM correspondence less of a transaction and more of a dance, or at least more of a real conversation. A good conversation doesn't have the rigid structure of a protocol, it is a constant flow of information and ideas between two parties, each reacting to the ideas of the other.</p>
             <p>You'll have to forgive the obtuse metaphors. Code will follow soon, but for the moment, maybe reflect on what you think those ideas might look like if they were made manifest.</p>
+        </div>
+        
+        <div class="section" id="consulting">
+            <h1>CONSULTING SERVICES</h1>
+            <p>We don't have a lot of time to take on new work at the moment, but if you either have a) a lot of money or b) an interesting challenge in the implementation of generative AI or, preferably, c) both, then please get in touch: <a href="mailto:hello@cascadetech.ai" class="email">hello@cascadetech.ai</a></p>
         </div>
         
         <div class="section" id="contact">
