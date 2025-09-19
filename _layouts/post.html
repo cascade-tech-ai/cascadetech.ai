@@ -1,0 +1,29 @@
+---
+layout: default
+---
+<article class="section post">
+    <h1>{{ page.title }}</h1>
+    <div class="post-meta">
+        <span>{{ page.date | date: "%B %d, %Y" }}</span>
+        {% if page.author %}
+        <span> · {{ page.author }}</span>
+        {% endif %}
+    </div>
+    <div class="post-content">
+        {{ content }}
+    </div>
+    {% if page.twitter or page.bluesky %}
+    <div class="discussion-links">
+        Join the discussion:
+        {% if page.twitter %}
+            <a href="{{ page.twitter }}" target="_blank" rel="noopener">Twitter</a>
+        {% endif %}
+        {% if page.bluesky %}
+            <a href="{{ page.bluesky }}" target="_blank" rel="noopener">Bluesky</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    <div class="post-nav">
+        <a href="{{ '/blog/' | relative_url }}">← Back to Blog</a>
+    </div>
+</article>

@@ -1,0 +1,9 @@
+title: Cascade Technologies
+baseurl: ""
+url: ""
+permalink: /blog/:title/
+excerpt_separator: "<!--more-->"
+collections:
+  posts:
+    output: true
+plugins: []
