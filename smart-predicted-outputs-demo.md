@@ -5,7 +5,7 @@ hero_image: false
 ---
 <div class="section" id="demo">
     <h1>SMART PREDICTED OUTPUTS DEMO</h1>
-    <p>Try the feature with this minimal curl script against your local vLLMX OpenAI endpoint:</p>
+    <p>Point a local vLLMX OpenAI endpoint at this curl request and watch the aligner go to work:</p>
 <pre><code class="language-bash">curl https://localhost:8000/v1/chat/completions \
   -H "content-type: application/json" \
   -d '{
@@ -20,5 +20,5 @@ hero_image: false
     "max_completion_tokens": 64,
     "temperature": 0
   }'</code></pre>
-    <p>The server resumes proposing even if your local edit tweaks the mid-section of the function. Check your logs for alignment hits and accepted token bursts.</p>
+    <p>Keep an eye on the server logs—each time Myers finds a matching line, the accepted-span counters jump instead of resetting.</p>
 </div>
