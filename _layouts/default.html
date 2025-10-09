@@ -169,6 +169,18 @@
             margin-bottom: 3vh;
         }
 
+        .post > h1 {
+            font-size: clamp(2.2rem, 4vw, 2.9rem);
+            letter-spacing: 0.05em;
+            margin-bottom: 2.4vh;
+            color: rgba(110, 198, 206, 0.9);
+            text-shadow: 0 0 22px rgba(110, 198, 206, 0.2);
+        }
+
+        .post > h1::after {
+            display: none;
+        }
+
         .post-content img {
             max-width: 100%;
             height: auto;
@@ -201,18 +213,22 @@
         }
 
         .blog-card h2 {
-            font-size: 0.9rem;
-            margin-bottom: 2vh;
-            color: rgba(255, 255, 255, 0.8);
+            font-size: clamp(1.6rem, 2.6vw, 2.05rem);
+            margin-bottom: 1.2vh;
+            color: rgba(110, 198, 206, 0.92);
+            letter-spacing: 0.032em;
         }
 
         .blog-card h2 a {
             color: inherit;
             text-decoration: none;
+            text-shadow: 0 0 20px rgba(110, 198, 206, 0.26);
+            transition: color 0.3s ease, text-shadow 0.3s ease;
         }
 
         .blog-card h2 a:hover {
-            color: rgba(80, 180, 255, 0.8);
+            color: rgba(166, 227, 230, 0.96);
+            text-shadow: 0 0 24px rgba(110, 198, 206, 0.34);
         }
 
         .blog-card p {

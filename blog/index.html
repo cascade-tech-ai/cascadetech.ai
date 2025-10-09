@@ -5,7 +5,6 @@ hero_image: false
 ---
 <div class="section" id="blog">
     <h1>BLOG</h1>
-    <p>Dispatches from the Cascade team on research, product updates, and the future of applied generative AI.</p>
     {% if site.posts and site.posts != empty %}
     <div class="blog-list">
         {% for post in site.posts %}
@@ -15,7 +14,11 @@ hero_image: false
                 <span>{{ post.date | date: "%B %d, %Y" }}</span>
                 {% if post.author %}<span> · {{ post.author }}</span>{% endif %}
             </div>
+            {% if post.summary %}
+            <p>{{ post.summary }}</p>
+            {% else %}
             <p>{{ post.excerpt | strip_html | truncate: 220 }}</p>
+            {% endif %}
             <div class="post-nav">
                 <a href="{{ post.url | relative_url }}">Read the full article →</a>
             </div>

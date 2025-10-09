@@ -7,4 +7,3 @@ collections:
   posts:
     output: true
 plugins: []
-ob

@@ -3,6 +3,7 @@ layout: post
 title: "VLLM Predicted Outputs"
 date: 2025-09-19
 hero_image: false
+summary: "Get huge latency reductions with zero accuracy loss in VLLM using Cascade Technologies' Predicted Outputs."
 ---
 
 Have you ever asked an AI agent to make a simple change to a large piece of code, only to find yourself sitting idly by
