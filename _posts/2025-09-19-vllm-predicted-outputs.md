@@ -33,6 +33,417 @@ This is a test of predicted outputs on the code for a ~800 token Python snake ga
 perfect prediction (93-97% acceptance rate). "Multiplayer" uses the original code as prediction with the modification 
 prompt "make it multiplayer" (26-40% acceptance).
 
+<div id="cascade-comparison-root" style="width: 100%; min-height: 720px;"></div>
+<script type="module">
+  import React, { useMemo } from "https://esm.sh/react@18.3.1";
+  import { createRoot } from "https://esm.sh/react-dom@18.3.1/client";
+  import {
+    ResponsiveContainer,
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Cell
+  } from "https://esm.sh/recharts@2.12.7";
+
+  const CascadeComparison = () => {
+    const verbatimData = useMemo(
+      () => [
+        { name: "Baseline", speedup: 100, tokens: 56.9, color: "#94a3b8" },
+        { name: "OpenAI", speedup: (386.434 / 56.9) * 100, tokens: 386.434, color: "#3b82f6" },
+        { name: "Cascade", speedup: (1488.944 / 129.843) * 100, tokens: 1488.944, color: "#22c55e" }
+      ],
+      []
+    );
+
+    const multiplayerData = useMemo(
+      () => [
+        { name: "Baseline", speedup: 100, tokens: 71.674, color: "#94a3b8" },
+        { name: "OpenAI", speedup: (57.774 / 71.674) * 100, tokens: 57.774, color: "#3b82f6" },
+        { name: "Cascade", speedup: (178.454 / 121.17) * 100, tokens: 178.454, color: "#22c55e" }
+      ],
+      []
+    );
+
+    const CustomTooltip = ({ active, payload }) => {
+      if (active && payload && payload.length) {
+        const data = payload[0].payload;
+        return (
+          React.createElement(
+            "div",
+            { className: "cascade-tooltip" },
+            React.createElement("p", { className: "title" }, data.name),
+            React.createElement("p", null, `${data.speedup.toFixed(1)}% of baseline speed`),
+            React.createElement("p", { className: "muted" }, `${data.tokens.toFixed(1)} tokens/sec`)
+          )
+        );
+      }
+      return null;
+    };
+
+    return React.createElement(
+      "div",
+      { className: "cascade-chart" },
+      React.createElement(
+        "div",
+        { className: "cascade-chart__stack" },
+        React.createElement(
+          "div",
+          { className: "panel" },
+          React.createElement("h3", null, "Verbatim Repeat"),
+          React.createElement("p", null, "Perfect prediction scenario"),
+          React.createElement(
+            "div",
+            { className: "chart-wrapper" },
+            React.createElement(
+              ResponsiveContainer,
+              { width: "100%", height: 320 },
+              React.createElement(
+                BarChart,
+                {
+                  data: verbatimData,
+                  margin: { top: 20, right: 30, left: 20, bottom: 24 }
+                },
+                React.createElement(CartesianGrid, { strokeDasharray: "3 3", stroke: "#374151" }),
+                React.createElement(XAxis, { dataKey: "name", tick: { fill: "#9ca3af" } }),
+                React.createElement(
+                  YAxis,
+                  {
+                    label: {
+                      value: "% of Baseline Speed",
+                      angle: -90,
+                      position: "insideLeft",
+                      style: { fill: "#9ca3af" }
+                    },
+                    tick: { fill: "#9ca3af" }
+                  }
+                ),
+                React.createElement(Tooltip, { content: React.createElement(CustomTooltip, null) }),
+                React.createElement(Bar, { dataKey: "speedup", radius: [8, 8, 0, 0] }, verbatimData.map((entry, index) => React.createElement(Cell, { key: `verbatim-${index}`, fill: entry.color })))
+              )
+            )
+          ),
+          React.createElement(
+            "ul",
+            { className: "legend" },
+            React.createElement(
+              "li",
+              null,
+              React.createElement("span", { className: "legend-label" }, "OpenAI speedup:"),
+              React.createElement(
+                "strong",
+                { className: "legend-value positive" },
+                `${((386.434 / 56.9 - 1) * 100).toFixed(0)}% faster`
+              )
+            ),
+            React.createElement(
+              "li",
+              null,
+              React.createElement("span", { className: "legend-label" }, "Cascade speedup:"),
+              React.createElement(
+                "strong",
+                { className: "legend-value accent" },
+                `${((1488.944 / 129.843 - 1) * 100).toFixed(0)}% faster`
+              )
+            ),
+            React.createElement(
+              "li",
+              { className: "muted acceptance" },
+              React.createElement("span", { className: "legend-label" }, "Acceptance rate:"),
+              React.createElement(
+                "span",
+                { className: "legend-value acceptance-values" },
+                React.createElement("span", { className: "acceptance-openai" }, "OpenAI 93.15%"),
+                React.createElement("span", { className: "acceptance-divider" }, "|"),
+                React.createElement("span", { className: "acceptance-cascade" }, "96.67%")
+              )
+            )
+          )
+        ),
+        React.createElement(
+          "div",
+          { className: "panel" },
+          React.createElement("h3", null, "Code Modification"),
+          React.createElement("p", null, "Partial prediction scenario"),
+          React.createElement(
+            "div",
+            { className: "chart-wrapper" },
+            React.createElement(
+              ResponsiveContainer,
+              { width: "100%", height: 320 },
+              React.createElement(
+                BarChart,
+                {
+                  data: multiplayerData,
+                  margin: { top: 20, right: 30, left: 20, bottom: 24 }
+                },
+                React.createElement(CartesianGrid, { strokeDasharray: "3 3", stroke: "#4a5568" }),
+                React.createElement(XAxis, { dataKey: "name", tick: { fill: "#475569" } }),
+                React.createElement(
+                  YAxis,
+                  {
+                    label: {
+                      value: "% of Baseline Speed",
+                      angle: -90,
+                      position: "insideLeft",
+                      style: { fill: "#475569" }
+                    },
+                    tick: { fill: "#475569" }
+                  }
+                ),
+                React.createElement(Tooltip, { content: React.createElement(CustomTooltip, null) }),
+                React.createElement(Bar, { dataKey: "speedup", radius: [8, 8, 0, 0] }, multiplayerData.map((entry, index) => React.createElement(Cell, { key: `multiplayer-${index}`, fill: entry.color })))
+              )
+            )
+          ),
+          React.createElement(
+            "ul",
+            { className: "legend" },
+            React.createElement(
+              "li",
+              null,
+              React.createElement("span", { className: "legend-label" }, "OpenAI speedup:"),
+              React.createElement(
+                "strong",
+                { className: "legend-value negative" },
+                `${((57.774 / 71.674 - 1) * 100).toFixed(0)}% slower`
+              )
+            ),
+            React.createElement(
+              "li",
+              null,
+              React.createElement("span", { className: "legend-label" }, "Cascade speedup:"),
+              React.createElement(
+                "strong",
+                { className: "legend-value accent" },
+                `${((178.454 / 121.17 - 1) * 100).toFixed(0)}% faster`
+              )
+            ),
+            React.createElement(
+              "li",
+              { className: "muted acceptance" },
+              React.createElement("span", { className: "legend-label" }, "Acceptance rate:"),
+              React.createElement(
+                "span",
+                { className: "legend-value acceptance-values" },
+                React.createElement("span", { className: "acceptance-openai" }, "OpenAI 25.64%"),
+                React.createElement("span", { className: "acceptance-divider" }, "|"),
+                React.createElement("span", { className: "acceptance-cascade" }, "Cascade 40.03%")
+              )
+            )
+          )
+        )
+      )
+    );
+  };
+
+  const mount = () => {
+    const container = document.getElementById("cascade-comparison-root");
+    if (!container) return;
+
+    const root = createRoot(container);
+    root.render(React.createElement(CascadeComparison));
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", mount);
+  } else {
+    mount();
+  }
+</script>
+
+<style>
+  #cascade-comparison-root {
+    position: relative;
+    background: #000;
+    color: #e5e7eb;
+    border-radius: 20px;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.15);
+  }
+
+  #cascade-comparison-root .cascade-chart {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  #cascade-comparison-root .cascade-chart__intro h2 {
+    font-size: clamp(1.65rem, 3vw, 2.5rem);
+    margin-bottom: 0.5rem;
+  }
+
+  #cascade-comparison-root .cascade-chart__intro p {
+    color: rgba(226, 232, 240, 0.7);
+    max-width: 60ch;
+    line-height: 1.6;
+  }
+
+  #cascade-comparison-root .cascade-chart__intro .strong {
+    color: #f8fafc;
+    font-weight: 600;
+  }
+
+  #cascade-comparison-root .cascade-chart__stack {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  #cascade-comparison-root .panel {
+    background: rgba(15, 23, 42, 0.75);
+    border-radius: 16px;
+    padding: clamp(1.15rem, 2.3vw, 1.5rem) clamp(1.25rem, 2.5vw, 1.75rem) clamp(0.6rem, 1.5vw, 0.9rem);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    backdrop-filter: blur(8px);
+  }
+
+  #cascade-comparison-root .panel h3 {
+    font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+    margin-bottom: 0.25rem;
+    color: #e2e8f0;
+  }
+
+  #cascade-comparison-root .panel p {
+    color: rgba(203, 213, 225, 0.7);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+
+  #cascade-comparison-root .panel .chart-wrapper {
+    width: 100%;
+    height: 320px;
+  }
+
+  #cascade-comparison-root .panel .legend {
+    margin: 0.4rem auto 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    color: rgba(203, 213, 225, 0.8);
+    font-size: 0.9rem;
+    line-height: 1.15;
+    align-items: center;
+    width: min(100%, 22rem);
+  }
+
+  #cascade-comparison-root .panel .legend li {
+    display: grid;
+    grid-template-columns: clamp(6rem, 38%, 9.5rem) minmax(0, 1fr);
+    align-items: baseline;
+    column-gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    position: static;
+    width: 100%;
+  }
+
+  #cascade-comparison-root .panel .legend li + li {
+    margin-top: 0.15rem;
+  }
+
+  #cascade-comparison-root .panel .legend .legend-label {
+    color: rgba(148, 163, 184, 0.9);
+  }
+
+  #cascade-comparison-root .panel .legend .legend-value {
+    justify-self: stretch;
+    text-align: left;
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    color: #e2e8f0;
+    font-weight: 600;
+    flex-wrap: nowrap;
+  }
+
+  #cascade-comparison-root .panel .legend .legend-value.acceptance-values {
+    gap: 0.4rem;
+    white-space: nowrap;
+  }
+
+  #cascade-comparison-root .panel .legend strong {
+    font-weight: 600;
+  }
+
+  #cascade-comparison-root .panel .legend .positive {
+    color: #3b82f6;
+  }
+
+  #cascade-comparison-root .panel .legend .negative {
+    color: #f97316;
+  }
+
+  #cascade-comparison-root .panel .legend .accent {
+    color: #22c55e;
+  }
+
+  #cascade-comparison-root .panel .legend .muted {
+    color: rgba(148, 163, 184, 0.65);
+    font-size: 0.85rem;
+  }
+
+  #cascade-comparison-root .panel .legend .acceptance-openai {
+    color: #f87171;
+    font-weight: 600;
+    margin-left: 0;
+  }
+
+  #cascade-comparison-root .panel .legend .acceptance-cascade {
+    color: #22c55e;
+    font-weight: 600;
+    margin-left: 0;
+  }
+
+  #cascade-comparison-root .panel .legend .acceptance-divider {
+    margin: 0;
+    color: rgba(148, 163, 184, 0.5);
+    font-weight: 400;
+  }
+
+  #cascade-comparison-root .panel .legend .acceptance {
+    align-items: center;
+  }
+
+  #cascade-comparison-root .panel .legend li::before {
+    display: none;
+  }
+
+  #cascade-comparison-root .cascade-tooltip {
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(129, 140, 248, 0.35);
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.45);
+  }
+
+  #cascade-comparison-root .cascade-tooltip .title {
+    font-weight: 600;
+    margin: 0 0 0.25rem;
+    color: #f8fafc;
+  }
+
+  #cascade-comparison-root .cascade-tooltip .muted {
+    color: rgba(203, 213, 225, 0.7);
+    margin: 0;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 640px) {
+    #cascade-comparison-root {
+      padding: 1.25rem;
+    }
+
+    #cascade-comparison-root .panel .chart-wrapper {
+      height: 260px;
+    }
+  }
+</style>
+
 ## How does it work?
 
 Llm prompts are generally processed in two phases:
