@@ -5,14 +5,13 @@ date: 2025-09-19
 hero_image: false
 ---
 
-Have you ever asked an AI agent to make an simple change to a large piece of code, only to find yourself sitting idly by
-while the llm regurgitates pages and pages of code you've already wrote, with just a few small changes made?  Did you 
+Have you ever asked an AI agent to make a simple change to a large piece of code, only to find yourself sitting idly by
+while the llm regurgitates pages and pages of code you've already written with just a few small changes made?  Did you 
 wonder 'WHY does it have to regenerate all of this code token by token? Can't it just regenerate the pieces that have
 changed?'
 
-The answer is YES, with Predicted Outputs. Predicted outputs is a technique in LLM generation which uses a prediction
-about what the LLM will output to allow the llm to functionally skip generation of the parts that it already 'knows 
-about', and only generate the truly new tokens.  The prediction only needs to match partially: if a little bit matches
+The answer is YES, with Predicted Outputs. Predicted outputs is a technique in llm generation that uses a prediction
+of the model's output so the llm can skip sections it already 'knows about' and generate only new tokens.  The prediction only needs to match partially: if a little bit matches
 then the generation will speed up a little bit, if a lot matches then the speedup will be dramatic.
 
 Predicted outputs is not a common feature of most llm platforms - one of the only implementations of it is the original
@@ -454,7 +453,7 @@ They can be processed in parallel because, unlike output tokens, each token alre
 slower than their input tokens, even though the actual math and weights that process them are identical to input.
 
 <strong>tldr:</strong> Predicted Outputs uses a prediction about the contents of the model's output to aid in the
-generation of outputs tokens. When predictions match, output tokens can be processed in parallel, effectively as if 
+generation of output tokens. When predictions match, output tokens can be processed in parallel, effectively as if 
 they were input tokens.  This speedup is achieved with <strong>NO reduction in accuracy</strong>, the output of the 
 llm is identical.
 
@@ -501,7 +500,7 @@ much more:
 
 ## Implementation
 
-Cascade Technology's implementation works as a form of speculative decoding, but instead of using a draft model to 
+Cascade Technologies' implementation works as a form of speculative decoding, but instead of using a draft model to 
 generate predictions, we use the static text 'prediction' sent via the api as a basis for our speculative proposals.
 When the prediction and the output diverge, we use standard diff algorithms to realign the prediction. 
 - The prediction is entirely on the cpu, with no additional GPU resources required.
@@ -513,7 +512,7 @@ draft model, we simply use a static text prediction and the diff algorithm menti
 position in the static text where we currently are, and as long as the prediction matches, we propose chunks of text to
 the system. When the generation diverges from the prediction we use the Myers diff algorithm to attempt to realign.
 
-User's provide predictions via the <a href="https://platform.openai.com/docs/guides/predicted-outputs">standard OpenAI
+Users provide predictions via the <a href="https://platform.openai.com/docs/guides/predicted-outputs">standard OpenAI
 API</a>, and the rest is automatic.
 
 You can use Predicted Outputs yourself today via Cascade
