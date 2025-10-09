@@ -25,72 +25,13 @@ implementation scales nearly linearly with prediction accuracy, meaning that a 5
 generations in roughly half the time, and 100% accurate predictions will be nearly instantaneous.  Truly, the llm only
 needs to generate the new content in an output.
 
-## How does it work?
-
-Llm prompts are generally processed in two phases:
-- First the input tokens are processed <strong>in parallel</strong> very quickly, thousands of tokens may all be
-processed in hundreds of milliseconds.  They can be processed so quickly because they can be processed in parallel.  
-They can be processed in parallel because, unlike output tokens, each token already knows all the tokens that precede it.
-- Next the output tokens are processed one at a time often at 10 or more milliseconds per token, 100x or more times
-slower than their input tokens, even though the actual math and weights that process them are identical to input.
-
-<strong>tldr:</strong> Predicted Outputs uses a prediction about the contents of the model's output to aid in the
-generation of outputs tokens. When predictions match, output tokens can be processed in parallel, effectively as if 
-they were input tokens.  This speedup is achieved with <strong>NO reduction in accuracy</strong>, the output of the 
-llm is identical.
-
-* The user provides a prediction for the output of their llm request.  This can be many things, but an
-easy example to understand is the case of code modification, in which case you would provide the
-original code as the prediction.
-* As long as the prediction is aligned with the output, we are able to process our llm generation
-in parallel, which can make it orders of magnitude faster.
-* When the prediction diverges from the output, we use standard diff algorithms to realign the prediction and continue
-processing the output in parallel.
-* Predicted Outputs is already supported in the standard OpenAI API so you can drop it in and use it with very few changes 
-to your client code.
-
-## Technical Details
-
-Cascade Technology's implementation works as a form of speculative decoding, but instead of using a draft model to 
-generate predictions, we use the static text 'prediction' sent via the api as a basis for our speculative proposals.
-When the prediction and the output diverge, we use standard diff algorithms to realign the prediction. 
-- The prediction is entirely on the cpu, with no additional GPU resources required.
-- The alignment algorithm's execution can be hidden with a one frame delay on alignment, eliminating any latency overhead.
-- Only exact prediction matches are accepted, so there is no loss in accuracy.
-
-## Example
-
-<div class="diff-block">
-  <strong>Prediction</strong>
-  <pre><code>Predicted Outputs
-Predicted outputs are great because they
-allow you to use knowledge about the likely
-output to speed up generation.</code></pre>
-</div>
-
-<div class="diff-block">
-  <strong>Model output with Predicted Outputs</strong>
-  <pre><code><span class="diff-line"><span class="diff-match">Predicted Outputs</span><span class="diff-miss">:</span></span>
-<span class="diff-line diff-miss">Predicted outputs are great because they</span>
-<span class="diff-line diff-match">allow you to use knowledge about the likely</span>
-<span class="diff-line diff-match">output to speed up generation.</span></code></pre>
-</div>
-
-Notice the colon on the first line of the second block!  As you can see, Predicted Outputs needs one identical line to realign, 
-but then carries on with the prediction for the rest of the generation.  The tokens in green are generated nearly "for free".
-
-Because running LLM model passes is so slow, and computing text diffs are so fast, matching just a single line can often
-provide speed benefits over the no-prediction base case, and there are many use cases where you can frequently match
-much more:
-
-* Coding agents modifying sections of code. This is the easiest win for Predicted Outputs, given the ease of
-  prediction and frequency of prediction matching.
-* Implementing true Structured Outputs can often be very complicated, but passing an example of your output as a
-  prediction can often get many of the speed benefits with much less difficulty.
-* Modifying documents.
-* Updating state agent state dicts / memory.
+Try a demo here: <a href="http://app.cascadetech.ai">http://app.cascadetech.ai</a>
 
 ## Comparison with OpenAI
+
+This is a test of predicted outputs on the code for a ~800 token Python snake game. "Verbatim" repeats the code with 
+perfect prediction (93-97% acceptance rate). "Multiplayer" uses the original code as prediction with the modification 
+prompt "make it multiplayer" (26-40% acceptance).
 
 <div id="cascade-comparison-root" style="width: 100%; min-height: 720px;"></div>
 <script type="module">
@@ -145,24 +86,6 @@ much more:
     return React.createElement(
       "div",
       { className: "cascade-chart" },
-      React.createElement(
-        "div",
-        { className: "cascade-chart__intro" },
-        React.createElement(
-          "h2",
-          null,
-          "Cascade vs OpenAI: Predicted Outputs Performance"
-        ),
-        React.createElement(
-          "p",
-          null,
-          "Testing predicted outputs on a ~800 token Python snake game. ",
-          React.createElement("span", { className: "strong" }, "Verbatim"),
-          " repeats the code with perfect prediction (93-97% acceptance). ",
-          React.createElement("span", { className: "strong" }, "Multiplayer"),
-          " uses the original code as prediction with the modification prompt \"make it multiplayer\" (26-40% acceptance)."
-        )
-      ),
       React.createElement(
         "div",
         { className: "cascade-chart__stack" },
@@ -521,7 +444,69 @@ much more:
   }
 </style>
 
+## How does it work?
+
+Llm prompts are generally processed in two phases:
+- First the input tokens are processed <strong>in parallel</strong> very quickly, thousands of tokens may all be
+processed in hundreds of milliseconds.  They can be processed so quickly because they can be processed in parallel.  
+They can be processed in parallel because, unlike output tokens, each token already knows all the tokens that precede it.
+- Next the output tokens are processed one at a time often at 10 or more milliseconds per token, 100x or more times
+slower than their input tokens, even though the actual math and weights that process them are identical to input.
+
+<strong>tldr:</strong> Predicted Outputs uses a prediction about the contents of the model's output to aid in the
+generation of outputs tokens. When predictions match, output tokens can be processed in parallel, effectively as if 
+they were input tokens.  This speedup is achieved with <strong>NO reduction in accuracy</strong>, the output of the 
+llm is identical.
+
+* The user provides a prediction for the output of their llm request.  This can be many things, but an
+easy example to understand is the case of code modification, in which case you would provide the
+original code as the prediction.
+* As long as the prediction is aligned with the output, we are able to process our llm generation
+in parallel, which can make it orders of magnitude faster.
+* When the prediction diverges from the output, we use standard diff algorithms to realign the prediction and continue
+processing the output in parallel.
+* Predicted Outputs is already supported in the standard OpenAI API so you can drop it in and use it with very few changes 
+to your client code.
+
+## Example
+<div class="diff-block">
+  <strong>Prediction</strong>
+  <pre><code>Predicted Outputs
+Predicted outputs are great because they
+allow you to use knowledge about the likely
+output to speed up generation.</code></pre>
+</div>
+
+<div class="diff-block">
+  <strong>Model output with Predicted Outputs</strong>
+  <pre><code><span class="diff-line"><span class="diff-match">Predicted Outputs</span><span class="diff-miss">:</span></span>
+<span class="diff-line diff-miss">Predicted outputs are great because they</span>
+<span class="diff-line diff-match">allow you to use knowledge about the likely</span>
+<span class="diff-line diff-match">output to speed up generation.</span></code></pre>
+</div>
+
+Notice the colon on the first line of the second block!  As you can see, Predicted Outputs needs one identical line to realign, 
+but then carries on with the prediction for the rest of the generation.  The tokens in green are generated nearly "for free".
+
+Because running LLM model passes is so slow, and computing text diffs are so fast, matching just a single line can often
+provide speed benefits over the no-prediction base case, and there are many use cases where you can frequently match
+much more:
+
+* Coding agents modifying sections of code. This is the easiest win for Predicted Outputs, given the ease of
+  prediction and frequency of prediction matching.
+* Implementing true Structured Outputs can often be very complicated, but passing an example of your output as a
+  prediction can often get many of the speed benefits with much less difficulty.
+* Modifying documents.
+* Updating state agent state dicts / memory.
+
 ## Implementation
+
+Cascade Technology's implementation works as a form of speculative decoding, but instead of using a draft model to 
+generate predictions, we use the static text 'prediction' sent via the api as a basis for our speculative proposals.
+When the prediction and the output diverge, we use standard diff algorithms to realign the prediction. 
+- The prediction is entirely on the cpu, with no additional GPU resources required.
+- The alignment algorithm's execution can be hidden with a one frame delay on alignment, eliminating any latency overhead.
+- Only exact prediction matches are accepted, so there is no loss in accuracy.
 
 VLLM provides an easy mechanism to integrate Predicted Outputs in their speculative decoding system. Instead of a
 draft model, we simply use a static text prediction and the diff algorithm mentioned before. We keep a cursor to the
